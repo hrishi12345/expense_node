@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expense Tracker</title>
+  <style>
+    .expense-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .expense-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .expense-item button {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Expense Tracker</h1>
+
+  <form id="expense-form" action="/" method="POST">
+    <div>
+      <label for="expense-amount">Expense Amount:</label>
+      <input type="number" id="expense-amount" name="expenseAmount" required>
+    </div>
+    <div>
+      <label for="expense-description">Description:</label>
+      <input type="text" id="expense-description" name="expenseDescription" required>
+    </div>
+    <div>
+      <label for="expense-category">Choose Category:</label>
+      <select id="expense-category" name="expenseCategory">
+        <option value="food">Food</option>
+        <option value="travel">Travel</option>
+        <option value="shopping">Shopping</option>
+      </select>
+    </div>
+    <div>
+      <button type="submit">Add Expense</button>
+    </div>
+  </form>
+
+  <h2>Expense List</h2>
+
+  <ul id="expense-list" class="expense-list">
+    <% for (const product of products) { %>
+      <li class="expense-item">
+        <span><%= product.amount %> - <%= product.description %> - <%= product.category %></span>
+        <div>
+          <button class="edit-button">Edit</button>
+          <button class="delete-button">Delete</button>
+        </div>
+      </li>
+    <% } %>
+  </ul>
+
+  <script>
+    const expenseForm = document.getElementById('expense-form');
+    const expenseList = document.getElementById('expense-list');
+
+    expenseForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Get form input values
+      const expenseAmount = document.getElementById('expense-amount').value;
+      const expenseDescription = document.getElementById('expense-description').value;
+      const expenseCategory = document.getElementById('expense-category').value;
+
+      // Create list item HTML
+      const listItem = document.createElement('li');
+      listItem.className = 'expense-item';
+      listItem.innerHTML = `
+        <span>${expenseAmount} - ${expenseDescription} - ${expenseCategory}</span>
+        <div>
+          <button class="edit-button">Edit</button>
+          <button class="delete-button">Delete</button>
+        </div>
+      `;
+
+      expenseList.appendChild(listItem);
+
+      // Reset form fields
+      expenseForm.reset();
+    });
+
+    expenseList.addEventListener('click', function(event) {
+      const target = event.target;
+
+      if (target.classList.contains('delete-button')) {
+        const listItem = target.closest('.expense-item');
+        listItem.remove();
+      }
+    });
+  </script>
+</body>
+</html>
